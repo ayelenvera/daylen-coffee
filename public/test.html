@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Page</h1>
+    <p>If you can see this, the web server is working correctly.</p>
+    
+    <h2>Test Links</h2>
+    <ul>
+        <li><a href="/test-route">Test API Route</a></li>
+        <li><a href="/test-home">Test Home Page</a></li>
+    </ul>
+    
+    <div id="test-result">
+        <p>Testing JavaScript... <span id="js-test">❌ Not working</span></p>
+    </div>
+    
+    <script>
+        // Test JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            const jsTest = document.getElementById('js-test');
+            if (jsTest) {
+                jsTest.textContent = '✅ Working';
+                jsTest.className = 'success';
+            }
+            
+            // Test fetch API
+            fetch('/test-route')
+                .then(response => response.json())
+                .then(data => {
+                    const resultDiv = document.createElement('div');
+                    resultDiv.innerHTML = `
+                        <h3>API Test Result:</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                    document.getElementById('test-result').appendChild(resultDiv);
+                })
+                .catch(error => {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.innerHTML = `
+                        <h3>API Test Failed:</h3>
+                        <p>${error.message}</p>
+                    `;
+                    document.getElementById('test-result').appendChild(errorDiv);
+                });
+        });
+    </script>
+</body>
+</html>
