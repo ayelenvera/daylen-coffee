@@ -9,8 +9,8 @@
         <div class="mb-8">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between">
             <div class="flex items-center space-x-4">
-              <div class="bg-gradient-to-r from-orange-500 to-red-500 p-3 rounded-xl">
-                <span class="text-2xl text-white">🔥</span>
+              <div class="bg-amber-100 p-3 rounded-xl">
+                <span class="text-2xl">🔥</span>
               </div>
               <div>
                 <h1 class="text-3xl font-bold text-gray-900">Gestión de Promociones</h1>
@@ -22,11 +22,11 @@
             
             <!-- Estadísticas rápidas MEJORADAS -->
             <div class="flex space-x-4 mt-4 md:mt-0">
-              <div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl px-4 py-3 shadow-lg">
+              <div class="bg-amber-500 text-white rounded-xl px-4 py-3 shadow-lg">
                 <div class="font-bold text-xl">{{ productsWithPromotions.length }}</div>
                 <div class="text-amber-100 text-sm">En Promoción</div>
               </div>
-              <div class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl px-4 py-3 shadow-lg">
+              <div class="bg-blue-500 text-white rounded-xl px-4 py-3 shadow-lg">
                 <div class="font-bold text-xl">{{ productsWithoutPromotions.length }}</div>
                 <div class="text-blue-100 text-sm">Disponibles</div>
               </div>
@@ -60,11 +60,11 @@
                 :class="[
                   'flex-1 py-3 px-4 text-sm font-medium rounded-md transition-all duration-200 flex items-center justify-center',
                   activeTab === tab.id
-                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg'
+                    ? 'bg-amber-500 text-white shadow-lg'
                     : 'text-gray-600 hover:text-amber-600 hover:bg-amber-50'
                 ]"
               >
-                <span class="mr-2">{{ getTabIcon(tab.id) }}</span>
+                <span class="mr-2" v-html="getTabIcon(tab.id)"></span>
                 {{ tab.name }}
                 <span 
                   v-if="tab.count !== null && tab.count > 0"
@@ -88,9 +88,11 @@
           <!-- Pestaña: Agregar Promociones MEJORADA -->
           <div v-if="activeTab === 'add'">
             <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-6 border-b border-amber-200">
+              <div class="bg-yellow-50 p-6 border-b border-amber-200">
                 <h2 class="text-xl font-bold text-gray-900 flex items-center">
-                  <span class="text-amber-600 mr-3">➕</span>
+                  <span class="mr-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                    <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                  </svg></span>
                   Agregar Nueva Promoción
                 </h2>
                 <p class="text-amber-700 text-sm mt-1">
@@ -106,7 +108,7 @@
                       📦 Seleccionar Producto
                       <span class="text-amber-600 ml-1">*</span>
                     </label>
-                    <div class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                    <div class="space-y-4 max-h-[740px] overflow-y-auto pr-2 pl-2 pt-2">
                       <div
                         v-for="product in productsWithoutPromotions"
                         :key="product.id"
@@ -153,12 +155,12 @@
 
                   <!-- Configuración de descuento MEJORADA -->
                   <div v-if="selectedProduct" class="space-y-6">
-                    <div class="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-5 border border-gray-200">
+                    <div class="bg-blue-50 rounded-xl p-5 border border-gray-200">
                       <div class="flex items-center space-x-4">
                         <img
                           :src="selectedProduct.image_url"
                           :alt="selectedProduct.name"
-                          class="w-16 h-16 object-cover rounded-xl border-2 border-amber-300"
+                          class="w-16 h-16 object-cover rounded-xl border-1 border-amber-300"
                         />
                         <div>
                           <h3 class="font-bold text-gray-900 text-lg">{{ selectedProduct.name }}</h3>
@@ -184,7 +186,7 @@
                           :class="[
                             'p-4 border-2 rounded-xl text-center transition-all duration-200 transform hover:scale-105',
                             selectedDiscount === option.value
-                              ? 'border-amber-500 bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg ring-4 ring-amber-200'
+                              ? 'border-amber-500 bg-amber-500 text-white shadow-lg'
                               : 'border-gray-200 bg-white text-gray-700 hover:border-amber-300 hover:shadow-md'
                           ]"
                         >
@@ -197,7 +199,6 @@
                     <!-- Vista previa del precio MEJORADA -->
                     <div class="bg-white border-2 border-amber-200 rounded-xl p-5 shadow-lg">
                       <h4 class="font-semibold text-gray-900 mb-4 flex items-center">
-                        <span class="text-amber-600 mr-2">👁️</span>
                         Vista Previa del Precio
                       </h4>
                       <div class="space-y-3">
@@ -209,14 +210,14 @@
                         </div>
                         <div class="flex justify-between items-center">
                           <span class="text-gray-600">Descuento ({{ selectedDiscount }}%):</span>
-                          <span class="text-red-600 font-semibold">
+                          <span class="text-red-600 font-semibold text-lg">
                             -₲ {{ discountAmount.toLocaleString('es-PY') }}
                           </span>
                         </div>
                         <div class="border-t border-amber-200 pt-3 mt-3">
                           <div class="flex justify-between items-center">
                             <span class="text-gray-900 font-bold text-lg">Precio promocional:</span>
-                            <span class="text-green-600 font-bold text-2xl">
+                            <span class="text-green-600 font-bold text-xl">
                               ₲ {{ promotionalPrice.toLocaleString('es-PY') }}
                             </span>
                           </div>
@@ -254,7 +255,7 @@
                     <button
                       @click="addPromotion"
                       :disabled="addingPromotion"
-                      class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] disabled:scale-100 shadow-lg hover:shadow-xl disabled:shadow-none flex items-center justify-center"
+                      class="w-full bg-amber-700 hover:bg-amber-900 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] disabled:scale-100 shadow-lg hover:shadow-xl disabled:shadow-none flex items-center justify-center"
                     >
                       <span v-if="addingPromotion" class="flex items-center">
                         <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
@@ -269,7 +270,6 @@
                       </span>
                     </button>
                   </div>
-
                   <!-- Estado sin producto seleccionado MEJORADO -->
                   <div v-else class="flex items-center justify-center h-64 text-gray-400">
                     <div class="text-center">
@@ -286,14 +286,21 @@
           <!-- Pestaña: Promociones Activas MEJORADA -->
           <div v-if="activeTab === 'active'">
             <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b border-green-200">
+              <div class="bg-amber-50 p-6 border-b border-amber-200">
                 <h2 class="text-xl font-bold text-gray-900 flex items-center">
-                  <span class="text-green-600 mr-3">🔥</span>
+                  <span class="mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                      <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
                   Promociones Activas
-                  <span class="ml-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow-lg">
+                  <span class="ml-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow-lg">
                     {{ productsWithPromotions.length }} activas
                   </span>
                 </h2>
+                <p class="text-amber-700 text-sm mt-1">
+                  Selecciona un producto y edita los campos de: fecha y porcentaje de descuento
+                </p>
               </div>
 
               <div class="p-6">
@@ -304,10 +311,10 @@
                     class="border-2 border-gray-200 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] bg-white"
                   >
                     <!-- Badge de descuento MEJORADO -->
-                    <div class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-3 text-sm font-bold text-center relative">
+                    <div class="bg-red-500 text-white px-4 py-3 text-sm font-bold text-center relative">
                       <span class="text-lg">🏷️</span>
                       <span class="ml-2">{{ product.discount_percentage }}% OFF</span>
-                      <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-pink-500 rotate-45"></div>
+                      <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-red-600 rotate-45"></div>
                     </div>
 
                     <div class="p-5">
@@ -316,7 +323,7 @@
                         <img
                           :src="product.image_url"
                           :alt="product.name"
-                          class="w-20 h-20 object-cover rounded-xl border-2 border-amber-300 flex-shrink-0"
+                          class="w-20 h-20 object-cover rounded-xl border-1 border-amber-300 flex-shrink-0"
                         />
                         <div class="flex-1 min-w-0">
                           <h3 class="font-bold text-gray-900 text-lg mb-1">{{ product.name }}</h3>
@@ -336,11 +343,11 @@
                         </div>
                         <div class="flex justify-between items-center">
                           <span class="text-sm text-gray-600">Precio promocional:</span>
-                          <span class="text-xl font-bold text-green-600">
+                          <span class="text-lg font-bold text-green-600">
                             ₲ {{ product.promotional_price.toLocaleString('es-PY') }}
                           </span>
                         </div>
-                        <div class="flex justify-between items-center text-sm bg-green-50 p-2 rounded-lg">
+                        <div class="flex justify-between items-center text-sm rounded-lg">
                           <span class="text-gray-700 font-semibold">Ahorro:</span>
                           <span class="text-red-600 font-bold">
                             -₲ {{ product.savings_amount.toLocaleString('es-PY') }}
@@ -366,14 +373,14 @@
                       <div class="flex space-x-3">
                         <button
                           @click="editPromotion(product)"
-                          class="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center"
+                          class="flex-1 bg-blue-500 hover:bg-blue-800 text-white py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center"
                         >
                           <span class="mr-2">✏️</span>
                           Editar
                         </button>
                         <button
                           @click="removePromotion(product)"
-                          class="flex-1 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center"
+                          class="flex-1 bg-red-500 hover:bg-red-800 text-white py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center"
                         >
                           <span class="mr-2">🗑️</span>
                           Eliminar
@@ -399,16 +406,25 @@
           <!-- Pestaña: Historial MEJORADA -->
           <div v-if="activeTab === 'history'">
             <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-6 border-b border-purple-200">
+              <div class="bg-amber-50 p-6 border-b border-amber-200">
                 <div class="flex items-center justify-between">
-                  <h2 class="text-xl font-bold text-gray-900 flex items-center">
-                    <span class="text-purple-600 mr-3">📊</span>
-                    Historial de Promociones
-                  </h2>
+                  <div class="flex flex-col">
+                    <h2 class="text-xl font-bold text-gray-900 flex items-center">
+                      <span class="mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                          <path fill-rule="evenodd" d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm4.5 7.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0v-2.25a.75.75 0 0 1 .75-.75Zm3.75-1.5a.75.75 0 0 0-1.5 0v4.5a.75.75 0 0 0 1.5 0V12Zm2.25-3a.75.75 0 0 1 .75.75v6.75a.75.75 0 0 1-1.5 0V9.75A.75.75 0 0 1 13.5 9Zm3.75-1.5a.75.75 0 0 0-1.5 0v9a.75.75 0 0 0 1.5 0v-9Z" clip-rule="evenodd" />
+                        </svg>
+                      </span>
+                      Historial de Promociones
+                    </h2>
+                    <p class="text-amber-700 text-sm mt-1">
+                      Visualiza todas las promociones aplicadas alguna vez
+                    </p>
+                  </div>
                   <button
                     @click="clearHistory"
                     :disabled="clearingHistory"
-                    class="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 flex items-center"
+                    class="bg-red-500 hover:bg-red-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 flex items-center"
                   >
                     <span v-if="clearingHistory" class="flex items-center">
                       <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
@@ -429,7 +445,7 @@
                 <div class="overflow-x-auto rounded-xl shadow-inner">
                   <table class="w-full">
                     <thead>
-                      <tr class="bg-gradient-to-r from-gray-50 to-blue-50">
+                      <tr class="bg-amber-50">
                         <th class="text-left py-4 px-6 text-sm font-bold text-gray-700 border-b border-gray-200">Producto</th>
                         <th class="text-left py-4 px-6 text-sm font-bold text-gray-700 border-b border-gray-200">Descuento</th>
                         <th class="text-left py-4 px-6 text-sm font-bold text-gray-700 border-b border-gray-200">Precios</th>
@@ -442,7 +458,7 @@
                       <tr v-for="promotion in allPromotions" :key="promotion.id" class="hover:bg-gray-50 transition-colors duration-200">
                         <td class="py-4 px-6">
                           <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 bg-gradient-to-r from-amber-100 to-orange-100 rounded-xl flex items-center justify-center shadow-sm">
+                            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center shadow-sm">
                               <span class="text-xl">{{ getCategoryEmoji(promotion.category_name) }}</span>
                             </div>
                             <div>
@@ -505,7 +521,6 @@
                       </tr>
                     </tbody>
                   </table>
-
                   <!-- Estado vacío MEJORADO -->
                   <div 
                     v-if="allPromotions.length === 0"
@@ -526,7 +541,7 @@
     <!-- Modal de edición MEJORADO -->
     <div v-if="showEditModal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
       <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-100">
-        <div class="bg-gradient-to-r from-blue-500 to-cyan-500 p-6 rounded-t-2xl">
+        <div class="bg-blue-500 p-6 rounded-t-2xl">
           <h3 class="text-xl font-bold text-white flex items-center">
             <span class="text-2xl mr-3">✏️</span>
             Editar Promoción
@@ -614,7 +629,7 @@
           <button 
             @click="savePromotionEdit"
             :disabled="savingEdit"
-            class="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 disabled:scale-100 shadow-lg hover:shadow-xl flex items-center"
+            class="px-6 py-3 bg-blue-500 hover:bg-blue-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 disabled:scale-100 shadow-lg hover:shadow-xl flex items-center"
           >
             <span v-if="savingEdit" class="flex items-center">
               <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
@@ -696,13 +711,22 @@ const promotionalPrice = computed(() => {
   return selectedProduct.value.price - discountAmount.value
 })
 
-// Métodos MEJORADOS
 const getTabIcon = (tabId) => {
   switch(tabId) {
-    case 'add': return '➕'
-    case 'active': return '🔥'
-    case 'history': return '📊'
-    default: return '📦'
+    case 'add': 
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+  <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+</svg>`
+    case 'active': 
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+  <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z" clip-rule="evenodd" />
+</svg>`
+    case 'history': 
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+  <path fill-rule="evenodd" d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm4.5 7.5a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0v-2.25a.75.75 0 0 1 .75-.75Zm3.75-1.5a.75.75 0 0 0-1.5 0v4.5a.75.75 0 0 0 1.5 0V12Zm2.25-3a.75.75 0 0 1 .75.75v6.75a.75.75 0 0 1-1.5 0V9.75A.75.75 0 0 1 13.5 9Zm3.75-1.5a.75.75 0 0 0-1.5 0v9a.75.75 0 0 0 1.5 0v-9Z" clip-rule="evenodd" />
+</svg>`
+    default: 
+      return '📦'
   }
 }
 
@@ -749,7 +773,7 @@ const addPromotion = async () => {
     const result = await response.json()
 
     if (result.success) {
-      successMessage.value = `✅ Promoción aplicada exitosamente a ${selectedProduct.value.name}`
+      successMessage.value = `Promoción aplicada exitosamente a ${selectedProduct.value.name}`
       // Recargar la página para actualizar los datos
       router.reload({ only: ['productsWithPromotions', 'productsWithoutPromotions', 'allPromotions'] })
       
@@ -800,7 +824,7 @@ const savePromotionEdit = async () => {
     const result = await response.json()
 
     if (result.success) {
-      successMessage.value = '✅ Promoción actualizada exitosamente'
+      successMessage.value = 'Promoción actualizada exitosamente'
       showEditModal.value = false
       router.reload({ only: ['productsWithPromotions', 'productsWithoutPromotions', 'allPromotions'] })
     } else {
@@ -830,7 +854,7 @@ const removePromotion = async (product) => {
     const result = await response.json()
 
     if (result.success) {
-      successMessage.value = `✅ Promoción eliminada exitosamente de ${product.name}`
+      successMessage.value = `Promoción eliminada exitosamente de ${product.name}`
       router.reload({ only: ['productsWithPromotions', 'productsWithoutPromotions', 'allPromotions'] })
     } else {
       errorMessage.value = result.message
@@ -857,7 +881,7 @@ const deletePromotionFromHistory = async (promotion) => {
     const result = await response.json()
 
     if (result.success) {
-      successMessage.value = '✅ Promoción eliminada del historial'
+      successMessage.value = 'Promoción eliminada del historial'
       router.reload({ only: ['productsWithPromotions', 'productsWithoutPromotions', 'allPromotions'] })
     } else {
       errorMessage.value = result.message
@@ -888,7 +912,7 @@ const clearHistory = async () => {
       })
     }
 
-    successMessage.value = `✅ Historial limpiado exitosamente (${inactivePromotions.length} promociones eliminadas)`
+    successMessage.value = `Historial limpiado exitosamente (${inactivePromotions.length} promociones eliminadas)`
     router.reload({ only: ['productsWithPromotions', 'productsWithoutPromotions', 'allPromotions'] })
   } catch (error) {
     errorMessage.value = 'Error al limpiar el historial. Por favor, intenta nuevamente.'

@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm \
     libzip-dev \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+    default-mysql-client \
+    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -20,24 +21,25 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Crear directorio de la aplicación
 WORKDIR /var/www
 
-# Copiar archivos de la aplicación
+# Copiar archivos de la aplicación PRIMERO
 COPY . .
 
-# Instalar dependencias de PHP
-RUN composer install --no-dev --optimize-autoloader
-
-# Instalar dependencias de Node.js y compilar assets
-RUN npm install && npm run build
-
-# Configurar permisos
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+# Configurar permisos ANTES de instalar dependencias
+RUN chown -R www-data:www-data /var/www
 RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Crear symlink para storage público
-RUN php artisan storage:link
+# Instalar dependencias de PHP
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Exponer puerto (Railway usa el puerto de la variable PORT)
+# Instalar dependencias de Node.js y compilar assets
+RUN npm ci --no-audit --prefer-offline && npm run build
+
+# Exponer puerto
 EXPOSE 8000
 
-# Comando de inicio optimizado para Railway
-CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000 || exit 1
+
+# Comando por defecto (Railway puede sobreescribirlo)
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

@@ -19,7 +19,7 @@ class Promotion extends Model
 
     protected $casts = [
         'discount_percentage' => 'decimal:2',
-        'original_price' => 'decimal:2',
+        'original_price' => 'integer',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'is_active' => 'boolean'

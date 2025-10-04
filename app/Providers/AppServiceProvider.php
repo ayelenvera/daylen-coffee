@@ -9,17 +9,18 @@ class AppServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        // Compartir usuario autenticado con todas las vistas
+        // Solo compartir el usuario si hay conexión a la base de datos
         View::composer('*', function ($view) {
-            $view->with('auth', [
-                'user' => auth()->user()
-            ]);
+            try {
+                $view->with('auth', [
+                    'user' => auth()->user()
+                ]);
+            } catch (\Exception $e) {
+                // Si hay error de base de datos, pasar usuario null
+                $view->with('auth', [
+                    'user' => null
+                ]);
+            }
         });
-
-            // Forzar UTF-8 en conexiones MySQL
-        if (config('database.default') === 'mysql') {
-            \DB::statement('SET NAMES utf8mb4');
-            \DB::statement('SET CHARACTER SET utf8mb4'); 
-        }
     }
 }

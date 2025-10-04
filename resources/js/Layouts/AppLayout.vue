@@ -3,17 +3,19 @@
   <div class="min-h-screen bg-gray-50 flex flex-col">
     <!-- Header con logo dinámico -->
     <header class="bg-white shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div class="flex justify-between items-center">
           <a href="/home" class="text-2xl font-bold text-amber-600 flex items-center">
             <span v-if="$page.props.shopSettings?.logo_url" class="mr-3">
               <img 
                 :src="$page.props.shopSettings.logo_url" 
                 :alt="$page.props.shopSettings?.shop_name || 'Daylen Cafetería'"
-                class="h-8 w-8 object-contain"
+                class="h-20 w-20 object-contain"
               />
             </span>
-            {{ $page.props.shopSettings?.shop_name || 'Daylen Cafetería' }}
+            <span class="font-serif italic tracking-widest text-amber-700 px-5 py-2 rounded-lg drop-shadow-lg">
+              {{ $page.props.shopSettings?.shop_name || 'Daylen Cafetería' }}
+            </span>
           </a>
           
           <!-- Enlaces de navegación básicos -->

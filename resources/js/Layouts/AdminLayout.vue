@@ -2,17 +2,19 @@
   <div class="min-h-screen bg-gray-50 flex flex-col">
     <!-- Header -->
     <header class="bg-white shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div class="flex justify-between items-center">
           <a href="/admin/dashboard" class="text-2xl font-bold text-amber-600 flex items-center">
             <span v-if="$page.props.shopSettings?.logo_url" class="mr-3">
-              <img 
+              <img
                 :src="$page.props.shopSettings.logo_url" 
                 :alt="$page.props.shopSettings?.shop_name || 'Daylen Cafetería'"
-                class="h-8 w-8 object-contain"
+                class="h-20 w-20 object-contain"
               />
             </span>
-            {{ $page.props.shopSettings?.shop_name || 'Daylen Cafetería' }}
+            <span class="font-serif italic tracking-widest text-amber-700 px-5 py-2 rounded-lg drop-shadow-lg">
+              {{ $page.props.shopSettings?.shop_name || 'Daylen Cafetería' }}
+            </span>
           </a>
 
           <nav class="flex space-x-4 items-center">
@@ -31,7 +33,7 @@
               <div class="absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                 <!-- Agregar esta línea: -->
                 <a href="/admin/shop-settings" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                  ⚙️ Configuración Tienda
+                  ⚙️ Configuración
                 </a>
                 <a href="/admin/dashboard" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                   📊 Estadísticas
@@ -43,15 +45,16 @@
                   🔥 Promociones
                 </a>
                 <a href="/admin/customization-rules" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                  ⚙️ Personalización
+                  🛠️ Personalización
                 </a>
                 <a href="/admin/orders" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                   📦 Pedidos
                 </a>
               </div>
             </div>
+            <HelpLink />
             <!-- Menú de usuario -->
-            <div class="relative">
+            <div class="relative px-3">
               <button 
                 @click="showUserMenu = !showUserMenu"
                 class="flex items-center space-x-2 text-gray-700 hover:text-amber-600"
@@ -82,7 +85,6 @@
                 </button>
               </div>
             </div>
-            <HelpLink />
           </nav>
         </div>
       </div>

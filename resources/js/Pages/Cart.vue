@@ -1,5 +1,5 @@
 <template>
-  <Head title="Carrito - Cafetería" />
+  <Head title="Carrito"/>
   
   <component :is="layoutComponent">
 

@@ -106,17 +106,7 @@ class HomeController extends Controller
                 'category_relation' => $product->categoryRelation ? [
                     'id' => $product->categoryRelation->id,
                     'name' => $product->categoryRelation->name,
-                    'emoji' => [
-                        '0' => '☕',
-                        '1' => '🍵',
-                        '2' => '🍰',
-                        '3' => '🥐',
-                        '4' => '🥗',
-                        '5' => '🧃',
-                        '6' => '🍫',
-                        '7' => '🥖',
-                        '10' => '🧃',
-                    ][$product->categoryRelation->emoji] ?? '📦',
+                    'emoji' => Category::getEmojiByIndex($product->categoryRelation->emoji),
                     'emoji_code' => $product->categoryRelation->emoji
                 ] : [
                     'id' => null,
@@ -125,19 +115,7 @@ class HomeController extends Controller
                     'emoji_code' => null
                 ],
                 'category_name' => $product->categoryRelation ? $product->categoryRelation->name : 'Sin categoría',
-                'category_emoji' => $product->categoryRelation ? (
-                    [
-                        '0' => '☕',
-                        '1' => '🍵',
-                        '2' => '🍰',
-                        '3' => '🥐',
-                        '4' => '🥗',
-                        '5' => '🧃',
-                        '6' => '🍫',
-                        '7' => '🥖',
-                        '10' => '🧃',
-                    ][$product->categoryRelation->emoji] ?? '📦'
-                ) : '📦',
+                'category_emoji' => $product->categoryRelation ? Category::getEmojiByIndex($product->categoryRelation->emoji) : '📦',
                 // Datos de promoción
                 'has_active_promotion' => $product->has_active_promotion,
                 'promotional_price' => $product->promotional_price,
@@ -188,17 +166,7 @@ class HomeController extends Controller
                     'category_relation' => $product->categoryRelation ? [
                         'id' => $product->categoryRelation->id,
                         'name' => $product->categoryRelation->name,
-                        'emoji' => [
-                            '0' => '☕',
-                            '1' => '🍵',
-                            '2' => '🍰',
-                            '3' => '🥐',
-                            '4' => '🥗',
-                            '5' => '🧃',
-                            '6' => '🍫',
-                            '7' => '🥖',
-                            '10' => '🧃',
-                        ][$product->categoryRelation->emoji] ?? '📦',
+                        'emoji' => Category::getEmojiByIndex($product->categoryRelation->emoji),
                         'emoji_code' => $product->categoryRelation->emoji
                     ] : [
                         'id' => null,
@@ -207,19 +175,7 @@ class HomeController extends Controller
                         'emoji_code' => null
                     ],
                     'category_name' => $product->categoryRelation ? $product->categoryRelation->name : 'Sin categoría',
-                    'category_emoji' => $product->categoryRelation ? (
-                        [
-                            '0' => '☕',
-                            '1' => '🍵',
-                            '2' => '🍰',
-                            '3' => '🥐',
-                            '4' => '🥗',
-                            '5' => '🧃',
-                            '6' => '🍫',
-                            '7' => '🥖',
-                            '10' => '🧃',
-                        ][$product->categoryRelation->emoji] ?? '📦'
-                    ) : '📦',
+                    'category_emoji' => $product->categoryRelation ? Category::getEmojiByIndex($product->categoryRelation->emoji) : '📦',
                     // Datos de promoción
                     'has_active_promotion' => $product->has_active_promotion,
                     'promotional_price' => $product->promotional_price,
@@ -234,18 +190,12 @@ class HomeController extends Controller
             'Ensaladas', 'Bebidas', 'Snacks', 'Panadería'
         ];
         
-        // Mapa de códigos de emoji a emojis reales
-        $emojiMap = [
-            '0' => '☕',
-            '1' => '🍵',
-            '2' => '🍰',
-            '3' => '🥐',
-            '4' => '🥗',
-            '5' => '🧃',
-            '6' => '🍫',
-            '7' => '🥖',
-            '10' => '🧃',
-        ];
+        // Mapa de códigos de emoji a emojis reales usando el modelo Category
+        $emojis = Category::getAvailableEmojis();
+        $emojiMap = [];
+        foreach ($emojis as $index => $emoji) {
+            $emojiMap[$index] = $emoji;
+        }
         
         // Obtener todas las categorías para los filtros
         $categories = Category::select('id', 'name', 'emoji')

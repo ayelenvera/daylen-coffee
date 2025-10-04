@@ -3,12 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 
 class Category extends Model
 {
     protected $fillable = ['name', 'slug', 'emoji', 'is_active'];
     
+        /**
+     * Scope para categorías activas
+     */
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('is_active', true);
+    }
+
     protected $casts = [
         'emoji' => 'integer', // Asegura que el emoji se maneje como entero
         'is_active' => 'boolean',
@@ -59,9 +67,18 @@ class Category extends Model
         return $this->hasMany(Product::class, 'category', 'id');
     }
 
-    // ✅ SCOPE PARA CATEGORÍAS ACTIVAS (siempre activas)
-    public function scopeActive($query)
+    // Método para obtener el mapeo de índices a emojis (para usar en controladores)
+    public static function getEmojiMap()
     {
-        return $query; // No filtrar, todas están activas
+        $emojis = self::getAvailableEmojis();
+        return array_flip($emojis);
     }
+
+    // Método para obtener el emoji por su índice
+    public static function getEmojiByIndex($index)
+    {
+        $emojis = self::getAvailableEmojis();
+        return $emojis[$index] ?? '📦';
+    }
+
 }

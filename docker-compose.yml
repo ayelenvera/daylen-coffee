@@ -1,4 +1,4 @@
-﻿# docker-compose.yml
+# docker-compose.yml - VERSIÓN SIMPLIFICADA PARA RAILWAY
 version: '3.8'
 
 services:
@@ -9,20 +9,28 @@ services:
     environment:
       - APP_ENV=production
       - APP_DEBUG=false
+      - LOG_CHANNEL=stderr
     volumes:
       - .:/var/www
     depends_on:
       - db
+    command: >
+      sh -c "
+      php artisan migrate --force &&
+      php artisan storage:link &&
+      php artisan optimize &&
+      php artisan serve --host=0.0.0.0 --port=8000"
 
   db:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-railway}
+      MYSQL_DATABASE: ${DB_DATABASE:-railway}
+      MYSQL_USER: ${DB_USERNAME:-railway}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-railway}
     volumes:
       - db_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
 
 volumes:
   db_data:

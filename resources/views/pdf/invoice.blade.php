@@ -76,11 +76,11 @@
                 <td style="border: none; padding: 2px 0;"><strong>RUC:</strong> {{ $shop['ruc'] ?? '12345678-9' }}</td>
             </tr>
             <tr>
-                <td style="border: none; padding: 2px 0;"><strong>Dirección:</strong> {{ $shop['address'] ?? 'Calle Carlos Gómez, Barrio Remansito Sector 5, Ciudad del Este' }}</td>
+                <td style="border: none; padding: 2px 0;"><strong>Email:</strong> {{ $shop['email'] ?? 'daylencoffee@gmail.com' }}</td>
                 <td style="border: none; padding: 2px 0;"><strong>Teléfono:</strong> {{ $shop['phone'] ?? '+595 986 195914' }}</td>
             </tr>
             <tr>
-                <td style="border: none; padding: 2px 0;" colspan="2"><strong>Email:</strong> {{ $shop['email'] ?? 'daylencoffee@gmail.com' }}</td>
+                <td style="border: none; padding: 2px 0;" colspan="2"><strong>Dirección:</strong> {{ $shop['address'] ?? 'Calle Carlos Gómez, Barrio Remansito Sector 5, Ciudad del Este' }}</td>
             </tr>
         </table>
     </div>
@@ -154,11 +154,11 @@
         <div style="margin-bottom: 5px;">
             <strong>Estado:</strong> 
             @if($order->status === 'pending')
-                ⏳ Pendiente
+                Pendiente
             @elseif($order->status === 'paid')
-                ✅ Pagado
+                Pagado
             @else
-                ❌ Cancelado
+                Cancelado
             @endif
         </div>
         <div style="margin-bottom: 5px;">

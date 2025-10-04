@@ -2,22 +2,23 @@
   <div class="min-h-screen bg-gray-50 flex flex-col">
     <!-- Header (el mismo contenido) -->
     <header class="bg-white shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div class="flex justify-between items-center">
           <a 
             :href="user && user.is_admin ? '/admin/dashboard' : '/home'" 
-            class="text-2xl font-bold text-amber-600 flex items-center"
+            class="text-2xl font-bold flex items-center"
           >
             <span v-if="$page.props.shopSettings?.logo_url" class="mr-3">
               <img 
                 :src="$page.props.shopSettings.logo_url" 
                 :alt="$page.props.shopSettings?.shop_name || 'Daylen Cafetería'"
-                class="h-8 w-8 object-contain"
+                class="h-20 w-20 object-contain"
               />
             </span>
-            {{ $page.props.shopSettings?.shop_name || 'Daylen Cafetería' }}
+            <span class="font-serif italic tracking-widest text-amber-700 px-5 py-2 rounded-lg drop-shadow-lg">
+              {{ $page.props.shopSettings?.shop_name || 'Daylen Cafetería' }}
+            </span>
           </a>
-
           <nav class="flex space-x-4 items-center">
             <!-- Navegación para usuarios normales -->
             <template v-if="user && !user.is_admin">
@@ -30,8 +31,9 @@
               </a>
               <a href="/orders" class="text-gray-700 hover:text-amber-600 px-3 py-2">Mis Pedidos</a>
             </template>
+            <HelpLink />
             <!-- Menú de usuario -->
-            <div v-if="user" class="relative">
+            <div v-if="user" class="relative px-3">
               <button 
                 @click="showUserMenu = !showUserMenu"
                 class="flex items-center space-x-2 text-gray-700 hover:text-amber-600"
@@ -76,7 +78,6 @@
                 Registrarse
               </a>
             </div>
-            <HelpLink />
           </nav>
         </div>
       </div>
@@ -107,17 +108,33 @@
               {{ $page.props.shopSettings?.about_us || 'Somos una cafetería dedicada a ofrecer los mejores productos con ingredientes de calidad.' }}
             </p>
           </div>
-          
+      
           <!-- Contacto -->
           <div class="text-center">
             <h3 class="text-lg font-semibold text-white mb-4">Contacto</h3>
             <div class="text-gray-300 text-sm space-y-1">
-              <p>{{ $page.props.shopSettings?.phone || '+595 986 195914' }}</p>
-              <p>{{ $page.props.shopSettings?.email || 'daylencoffee@gmail.com' }}</p>
+              <p>
+                <a 
+                  :href="`https://wa.me/${$page.props.shopSettings?.phone?.replace(/\D/g, '') || '595986195914'}`" 
+                  target="_blank"
+                  class="hover:text-amber-400 transition-colors duration-200"
+                >
+                  {{ $page.props.shopSettings?.phone || '+595 986 195914' }}
+                </a>
+              </p>
+              <p>
+                <a   
+                  :href="`https://mail.google.com/mail/u/0/?view=cm&to=${$page.props.shopSettings?.email || 'daylencoffee@gmail.com'}&su=Consulta%20${$page.props.shopSettings?.shop_name || 'Daylen Cafetería'}&body=Hola,%20me%20gustaría%20hacer%20una%20consulta`"
+                  target="_blank"
+                  class="hover:text-amber-400 transition-colors duration-200"
+                >
+                  {{ $page.props.shopSettings?.email || 'daylencoffee@gmail.com' }}
+                </a>
+              </p>
               <p>{{ $page.props.shopSettings?.address || 'Calle Carlos Gómez, Barrio Remansito Sector 5, Ciudad del Este' }}</p>
             </div>
           </div>
-          
+      
           <!-- Información legal -->
           <div class="text-center md:text-right">
             <h3 class="text-lg font-semibold text-white mb-4">Información Legal</h3>
@@ -126,7 +143,7 @@
             </div>
           </div>
         </div>
-        
+    
         <div class="border-t border-gray-700 mt-8 pt-6 text-center">
           <p class="text-white">&copy; {{ new Date().getFullYear() }} {{ $page.props.shopSettings?.shop_name || 'Daylen Cafetería' }}. Todos los derechos reservados.</p>
         </div>

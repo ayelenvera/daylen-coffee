@@ -2,7 +2,6 @@
 <template>
     <AdminLayout>
       <Head title="Reglas de Personalización" />
-      
       <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <!-- Header -->
@@ -47,7 +46,7 @@
                   <span 
                     v-for="option in rule.enabled_options" 
                     :key="option"
-                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
                   >
                     {{ availableOptions[option] }}
                   </span>
@@ -90,7 +89,7 @@
                 <h4 class="text-sm font-medium text-gray-700 mb-2">Coberturas:</h4>
                 <div class="flex flex-wrap gap-1">
                   <span 
-                    v-for="topping in rule.topping_options" 
+                    v-for="topping in rule.topping_options"
                     :key="topping.name"
                     class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-purple-100 text-purple-800"
                   >

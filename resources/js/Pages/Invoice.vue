@@ -1,5 +1,5 @@
 <template>
-  <Head title="Factura - Cafetería Daylen" />
+  <Head title="Factura" />
   <AuthenticatedLayout>
     <template #header>
       <div class="flex items-center justify-between">
@@ -154,7 +154,7 @@
                 <p class="text-red-600 mb-4">Haz clic en el botón a continuación para descargar tu factura en formato PDF</p>
                 <button @click="downloadPDF" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 mx-auto min-w-[200px] text-lg">
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                  <span>📄 Descargar Factura PDF</span>
+                  <span>Descargar Factura PDF</span>
                 </button>
               </div>
             </div>

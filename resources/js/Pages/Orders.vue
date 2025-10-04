@@ -1,5 +1,5 @@
 <template>
-  <Head title="Mis Pedidos" />
+  <Head title="Pedidos" />
   
   <AuthenticatedLayout>
     <div class="py-6">
@@ -149,7 +149,7 @@
                     <h2 class="text-2xl font-bold flex items-center">
                       <span class="mr-2">📦</span> Detalles del Pedido #{{ selectedOrder.id }}
                     </h2>
-                    <p class="text-amber-100 text-sm mt-1">Cafetería Daylen • {{ formatDate(selectedOrder.created_at) }}</p>
+                    <p class="text-amber-100 text-sm mt-1">{{ $page.props.shopSettings?.shop_name || 'Daylen Cafetería' }} • {{ formatDate(selectedOrder.created_at) }}</p>
                   </div>
                   
                   <div class="flex items-center space-x-3">
@@ -321,8 +321,14 @@
                   </svg>
                   <div>
                     <h4 class="text-sm font-medium text-gray-900">¿Necesitas ayuda con tu pedido?</h4>
-                    <p class="text-sm text-gray-600 mt-1">Si tienes alguna pregunta o necesitas asistencia, no dudes en contactar a nuestro equipo de soporte.</p>
-                    <p class="text-sm text-amber-700 font-medium mt-2">Email: daylencoffee@gmail.com</p>
+                    <p class="text-sm text-gray-600 mt-1 mb-2">Si tienes alguna pregunta o necesitas asistencia, no dudes en contactar a nuestro equipo de soporte.</p>
+                    <a 
+                      :href="`https://mail.google.com/mail/u/0/?view=cm&to=${$page.props.shopSettings?.email || 'daylencoffee@gmail.com'}&su=Consulta%20${$page.props.shopSettings?.shop_name || 'Daylen Cafetería'}&body=Hola,%20me%20gustaría%20hacer%20una%20consulta`"
+                      target="_blank"
+                      class="text-sm text-amber-700 hover:text-amber-800 transition-colors duration-200 font-medium"
+                    >
+                    Email: {{ $page.props.shopSettings?.email || 'daylencoffee@gmail.com' }}
+                    </a>
                   </div>
                 </div>
               </div>

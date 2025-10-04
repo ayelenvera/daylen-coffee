@@ -135,7 +135,13 @@
                     <div class="text-sm font-medium text-gray-900 leading-tight">{{ order.customer_name }}</div>
                     <div class="text-sm text-gray-500 truncate max-w-[130px] leading-tight">{{ order.user?.email }}</div>
                     <div class="text-xs text-blue-600 mt-1" v-if="order.phone">
-                      📞 {{ order.phone }}
+                      <a 
+                        :href="`https://wa.me/${order.phone.replace(/\D/g, '')}`" 
+                        target="_blank"
+                        class="hover:text-blue-800 transition-colors duration-200"
+                      >
+                        📞 {{ order.phone }}
+                      </a>
                     </div>
                   </td>
 
@@ -143,8 +149,18 @@
                   <td class="px-3 py-4 text-sm text-gray-700">
                     <div class="max-w-[200px]">
                       <!-- Resumen de productos -->
-                      <div class="font-medium text-gray-900 mb-1">
+                      <div class="font-medium text-gray-900 mb-1 flex items-center">
                         {{ order.total_items }} item{{ order.total_items !== 1 ? 's' : '' }}
+                        <button 
+                          @click="viewOrderDetails(order)"
+                          class="ml-2 text-amber-600 hover:text-amber-800 p-1 transition-colors rounded hover:bg-amber-50"
+                          title="Ver detalles completos"
+                        >
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                          </svg>
+                        </button>
                       </div>
                       
                       <!-- Lista de productos con personalizaciones -->
@@ -269,6 +285,139 @@
         </div>
       </div>
 
+      <!-- Modal de Detalles del Pedido -->
+      <div v-if="showDetailsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center p-4 z-50 overflow-y-auto">
+        <div class="relative w-full max-w-2xl bg-white rounded-xl shadow-2xl overflow-hidden my-8">
+          <!-- Encabezado -->
+          <div class="bg-gradient-to-r from-amber-600 to-amber-700 text-white p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-xl font-bold flex items-center">
+                  <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  Detalles del Pedido #{{ selectedOrderDetails?.id }}
+                </h2>
+                <p class="text-amber-100 text-sm mt-1">Información completa del pedido</p>
+              </div>
+              <button 
+                @click="closeDetailsModal" 
+                class="p-2 text-amber-100 hover:text-white rounded-full hover:bg-white/10 transition-colors duration-200"
+                title="Cerrar"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Cuerpo del Modal -->
+          <div class="p-6">
+            <!-- Información del Cliente -->
+            <div class="mb-6">
+              <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                Información del Cliente
+              </h3>
+              <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span class="font-medium text-gray-700">Nombre:</span>
+                    <p class="text-gray-900">{{ selectedOrderDetails?.customer_name }}</p>
+                  </div>
+                  <div>
+                    <span class="font-medium text-gray-700">Email:</span>
+                    <p class="text-gray-900">{{ selectedOrderDetails?.user?.email || 'No especificado' }}</p>
+                  </div>
+                  <div>
+                    <span class="font-medium text-gray-700">Teléfono:</span>
+                    <p class="text-gray-900">
+                      <a 
+                        :href="`https://wa.me/${selectedOrderDetails?.phone?.replace(/\D/g, '')}`" 
+                        target="_blank"
+                        class="text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                      >
+                        {{ selectedOrderDetails?.phone || 'No especificado' }}
+                      </a>
+                    </p>
+                  </div>
+                  <div class="md:col-span-2">
+                    <span class="font-medium text-gray-700">Dirección de envío:</span>
+                    <p class="text-gray-900">{{ selectedOrderDetails?.address || 'No especificada' }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Productos del Pedido -->
+            <div class="mb-6">
+              <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                </svg>
+                Productos ({{ selectedOrderDetails?.total_items || 0 }})
+              </h3>
+              <div class="space-y-3 max-h-96 overflow-y-auto">
+                <div 
+                  v-for="item in selectedOrderDetails?.order_items" 
+                  :key="item.id" 
+                  class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200"
+                >
+                  <div class="flex justify-between items-start mb-2">
+                    <div class="flex-1">
+                      <h4 class="font-semibold text-gray-900">{{ item.product_name }}</h4>
+                      <p class="text-sm text-gray-600">Cantidad: {{ item.quantity }}</p>
+                      <p class="text-sm font-medium text-amber-700">₲ {{ formatNumber(item.subtotal) }}</p>
+                    </div>
+                  </div>
+                  
+                  <!-- Personalizaciones -->
+                  <div v-if="hasPersonalizations(item)" class="mt-3 pt-3 border-t border-gray-100">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                      <div v-if="item.size && item.size !== 'Mediano'" class="flex items-center">
+                        <span class="w-2 h-2 bg-amber-400 rounded-full mr-2"></span>
+                        <span class="font-medium">Tamaño:</span>
+                        <span class="ml-1 text-gray-700">{{ item.size }}</span>
+                      </div>
+                      <div v-if="item.sugar && item.sugar !== 'Normal'" class="flex items-center">
+                        <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                        <span class="font-medium">Azúcar:</span>
+                        <span class="ml-1 text-gray-700">{{ item.sugar }}</span>
+                      </div>
+                      <div v-if="item.toppings && item.toppings.length > 0" class="md:col-span-2 flex items-start">
+                        <span class="w-2 h-2 bg-purple-400 rounded-full mr-2 mt-1 flex-shrink-0"></span>
+                        <div>
+                          <span class="font-medium">Toppings:</span>
+                          <span class="ml-1 text-gray-700">{{ item.toppings.join(', ') }}</span>
+                        </div>
+                      </div>
+                      <div v-if="item.addons && item.addons.length > 0" class="md:col-span-2 flex items-start">
+                        <span class="w-2 h-2 bg-green-400 rounded-full mr-2 mt-1 flex-shrink-0"></span>
+                        <div>
+                          <span class="font-medium">Addons:</span>
+                          <span class="ml-1 text-gray-700">{{ item.addons.join(', ') }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Resumen -->
+            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <div class="flex justify-between items-center text-lg font-semibold text-gray-900">
+                <span>Total del pedido:</span>
+                <span class="text-amber-700">₲ {{ formatNumber(selectedOrderDetails?.total) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Modal de Factura - Diseño Mejorado -->
       <div v-if="showInvoiceModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center p-4 z-50 overflow-y-auto">
         <div class="relative w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden my-8 transition-all duration-300 transform hover:scale-[1.005]">
@@ -340,7 +489,29 @@
                   </p>
                   <p class="flex items-start">
                     <span class="text-amber-600 mr-2">•</span>
-                    <span><span class="font-medium">Teléfono:</span> +595 986 195914</span>
+                    <span>
+                      <span class="font-medium">Teléfono:</span> 
+                      <a 
+                        href="https://wa.me/595986195914" 
+                        target="_blank"
+                        class="text-blue-600 hover:text-blue-800 transition-colors duration-200 ml-1"
+                      >
+                        +595 986 195914
+                      </a>
+                    </span>
+                  </p>
+                  <p class="flex items-start">
+                    <span class="text-amber-600 mr-2">•</span>
+                    <span>
+                      <span class="font-medium">Email:</span> 
+                      <a 
+                        href="https://mail.google.com/mail/u/0/?view=cm&to=daylencoffee@gmail.com&su=Consulta%20Daylen%20Cafetería&body=Hola,%20me%20gustaría%20hacer%20una%20consulta" 
+                        target="_blank"
+                        class="text-blue-600 hover:text-blue-800 transition-colors duration-200 ml-1"
+                      >
+                        daylencoffee@gmail.com
+                      </a>
+                    </span>
                   </p>
                   <p class="flex items-start">
                     <span class="text-amber-600 mr-2">•</span>
@@ -370,7 +541,18 @@
                   </p>
                   <p class="flex items-start">
                     <span class="text-blue-600 mr-2">•</span>
-                    <span><span class="font-medium">Teléfono:</span> {{ selectedInvoiceOrder?.phone || 'No especificado' }}</span>
+                    <span>
+                      <span class="font-medium">Teléfono:</span> 
+                      <a 
+                        v-if="selectedInvoiceOrder?.phone"
+                        :href="`https://wa.me/${selectedInvoiceOrder.phone.replace(/\D/g, '')}`" 
+                        target="_blank"
+                        class="text-blue-600 hover:text-blue-800 transition-colors duration-200 ml-1"
+                      >
+                        {{ selectedInvoiceOrder.phone }}
+                      </a>
+                      <span v-else class="ml-1">No especificado</span>
+                    </span>
                   </p>
                   <p class="flex items-start">
                     <span class="text-blue-600 mr-2">•</span>
@@ -431,11 +613,11 @@
                             <!-- AGREGAR TOPPINGS Y ADDONS -->
                             <div v-if="(item.toppings && item.toppings.length > 0) || (item.addons && item.addons.length > 0)" class="text-xs text-gray-500 mt-1">
                               <div v-if="item.toppings && item.toppings.length > 0" class="mt-1">
-                                <span class="font-medium text-purple-700">Coberturas:</span> 
+                                <span class="font-medium text-purple-700">Coberturas: </span> 
                                 <span class="text-purple-600">{{ item.toppings.join(', ') }}</span>
                               </div>
                               <div v-if="item.addons && item.addons.length > 0" class="mt-1">
-                                <span class="font-medium text-green-700">Agregados:</span> 
+                                <span class="font-medium text-green-700">Agregados: </span> 
                                 <span class="text-green-600">{{ item.addons.join(', ') }}</span>
                               </div>
                             </div>
@@ -566,7 +748,13 @@
               </div>
               <p class="text-sm text-gray-500">
                 Factura generada el {{ formatDate(selectedInvoiceOrder?.created_at) }} • 
-                <a href="tel:+595986195914" class="text-amber-600 hover:text-amber-700 font-medium">+595 986 195914</a>
+                <a 
+                  href="https://wa.me/595986195914" 
+                  target="_blank"
+                  class="text-amber-600 hover:text-amber-700 font-medium transition-colors duration-200"
+                >
+                  +595 986 195914
+                </a>
               </p>
               <p class="text-xs text-gray-400 mt-1">¡Gracias por elegir Daylen Cafetería!</p>
             </div>
@@ -603,6 +791,8 @@ const deletingSelected = ref(false)
 const deletingAll = ref(false)
 const showInvoiceModal = ref(false)
 const selectedInvoiceOrder = ref(null)
+const showDetailsModal = ref(false)
+const selectedOrderDetails = ref(null)
 
 // Watchers
 watch(() => props.orders, (val) => {
@@ -699,6 +889,16 @@ const formatDate = (dateString) => {
     hour: '2-digit',
     minute: '2-digit'
   })
+}
+
+const viewOrderDetails = (order) => {
+  selectedOrderDetails.value = order
+  showDetailsModal.value = true
+}
+
+const closeDetailsModal = () => {
+  showDetailsModal.value = false
+  selectedOrderDetails.value = null
 }
 
 const viewInvoice = (order) => {
