@@ -1,0 +1,15 @@
+/.github
+/.idea
+/.vscode
+/node_modules
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+/storage/logs
+/tests
+/vendor
+.env
+.git
+.gitattributes
+.gitignore
+README.md
