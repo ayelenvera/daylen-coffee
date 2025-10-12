@@ -1,0 +1,1 @@
+import{g as t,d as s,f as r}from"./app-BYhsu56_.js";const a={href:"/help",class:"flex items-center text-gray-700 hover:text-amber-600 py-2 transition-colors duration-200",title:"Centro de Ayuda"},l={__name:"HelpLink",setup(n){return(o,e)=>(s(),t("a",a,[...e[0]||(e[0]=[r("span",{class:"hidden sm:inline"},"Ayuda",-1)])]))}};export{l as _};
