@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Http\RedirectResponse;
+//use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -27,25 +27,25 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
     
         $request->session()->regenerate();
     
-        // ✅ CORREGIDO: Usar URLs seguras
+        // ✅ SOLUCIÓN CON URLs DIRECTAS ABSOLUTAS
         if (auth()->user()->is_admin) {
-            return redirect()->secure('/admin/dashboard');
+            return Inertia::location('/admin/dashboard');
         }
 
-        // ✅ CORREGIDO: intended con URL segura
-        return redirect()->intended(secure_url('/home'));
+        // Para usuarios normales - URL absoluta
+        return Inertia::location('/home');
     }
 
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request)
     {
         Auth::guard('web')->logout();
 
@@ -58,7 +58,7 @@ class AuthenticatedSessionController extends Controller
             $request->user()->tokens()->delete();
         }
 
-        // ✅ CORREGIDO: URL segura para logout
-        return redirect()->secure('/home');
+        // ✅ SOLUCIÓN: Inertia::location con URL directa
+        return Inertia::location('/home');
     }
 }
