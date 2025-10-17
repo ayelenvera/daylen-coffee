@@ -33,14 +33,13 @@ class AuthenticatedSessionController extends Controller
     
         $request->session()->regenerate();
     
-        // ✅ Redirigir según el tipo de usuario
+        // ✅ CORREGIDO: Usar URLs seguras
         if (auth()->user()->is_admin) {
-            // Forzar dashboard de admin sin respetar intended previo
-            return redirect('/admin/dashboard');
+            return redirect()->secure('/admin/dashboard');
         }
 
-        // Usuarios normales: respetar intended o ir a /home
-        return redirect()->intended('/home');
+        // ✅ CORREGIDO: intended con URL segura
+        return redirect()->intended(secure_url('/home'));
     }
 
     /**
@@ -59,6 +58,7 @@ class AuthenticatedSessionController extends Controller
             $request->user()->tokens()->delete();
         }
 
-        return redirect('/home');
+        // ✅ CORREGIDO: URL segura para logout
+        return redirect()->secure('/home');
     }
 }
